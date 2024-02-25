@@ -1,1 +1,60 @@
-<h1>Hello world</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <!-- A-Frame Libraries -->
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.min.js"></script>
+</head>
+<body style="margin : 0px; overflow: hidden;">
+  <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false;'>
+    <a-marker preset="hiro">
+      <!-- Text displaying book information -->
+      <a-entity id="bookInfo" position="0 0.5 0" rotation="270 0 0">
+        <a-text value="The Art of War\nSun Tzu\nPages: 273\nPublished: 5th Century BC" color="black" align="center" width="4"></a-text>
+      </a-entity>
+
+      <!-- Text displaying the review, initially hidden -->
+      <a-entity id="bookReview" position="0 0.5 0" rotation="270 0 0" visible="false">
+        <a-text value="A compelling study of strategy, tactics, and war philosophy. Sun Tzu's timeless book provides profound insights applicable beyond military theory into the realms of leadership and management." color="black" align="center" width="4"></a-text>
+      </a-entity>
+
+      <!-- Interactive Button -->
+      <a-box id="toggleButton" position="0 -0.5 0" rotation="270 0 0" color="red" depth="0.1" height="0.3" width="1" class="clickable">
+        <a-text value="Toggle Review" color="white" align="center" position="0 0 0.06"></a-text>
+      </a-box>
+    </a-marker>
+
+    <!-- Camera with cursor -->
+    <a-camera>
+      <a-cursor 
+        raycaster="objects: .clickable"
+        color="yellow">
+      </a-cursor>
+    </a-camera>
+  </a-scene>
+
+  <script>
+    AFRAME.registerComponent('clickhandler', {
+      init: function () {
+        this.el.addEventListener('click', () => {
+          var bookInfo = document.querySelector('#bookInfo');
+          var bookReview = document.querySelector('#bookReview');
+          var isInfoVisible = bookInfo.getAttribute('visible');
+          
+          // Toggle visibility
+          bookInfo.setAttribute('visible', !isInfoVisible);
+          bookReview.setAttribute('visible', isInfoVisible);
+        });
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add click handler to the button
+      document.querySelector('#toggleButton').setAttribute('clickhandler', '');
+    });
+  </script>
+</body>
+</html>
